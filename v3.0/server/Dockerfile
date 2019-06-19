@@ -21,25 +21,27 @@ RUN apk add --no-cache \
     && apk --purge del .build-deps \
     # supervisor config
     && mkdir -p /etc/supervisor/conf.d /opt/tmp/logs \
-    && touch /opt/tmp/logs/actorcloud.log \
-    && ln -sf /dev/stderr /opt/tmp/logs/actorcloud.log \
     && pip install supervisor \
     && echo_supervisord_conf > /etc/supervisor/supervisord.conf \
     && echo -e "[include]\nfiles = /etc/supervisor/conf.d/*.conf" >> /etc/supervisor/supervisord.conf \
     # nginx config
     && apk add --no-cache nginx \
     && mkdir -p /run/nginx \
-    && cp -r /opt/actorcloud/deploy/nginx/* /etc/nginx/ \
-    && rm -rf /opt/actorcloud/rule-engine deploy docs ui \
-    && cp /opt/actorcloud/server/config/config.yml /opt/actorcloud/server/instance/config.yml
+    && rm -rf /opt/actorcloud/rule-engine docs ui \
+    # copy from image to host and THEN bind mount for volumes.
+    && mkdir -p /tmp/stash/  \
+    && cp -r /etc/nginx /tmp/stash/  \
+    && cp -r /opt/actorcloud/server/static /tmp/stash/
 
 WORKDIR /opt/actorcloud/server
+
+ENV FLASK_APP=manage.py
 
 # - /opt/actorcloud/server/static： actorcloud static
 # - /opt/actorcloud/server/instance: actorcloud custom config and certs
 # - /opt/tmp/logs: actorcloud logs
 # - /etc/nginx: nginx config
-VOLUME ["/opt/actorcloud/server/static", "/opt/actorcloud/server/instance", "/opt/tmp/logs", "/etc/nginx"]
+VOLUME ["/opt/actorcloud/server/static", "/opt/actorcloud/server/instance", "/opt/tmp/logs/", "/etc/nginx"]
 
 # actorcloud will occupy these port:
 # - 80 port for nginx proxy
