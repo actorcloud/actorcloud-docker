@@ -1,5 +1,7 @@
 FROM python:3.6.8-alpine3.9
 
+ARG tag=3.0.0
+
 COPY docker-entrypoint.sh /usr/bin/
 
 RUN apk add --no-cache \
@@ -7,7 +9,7 @@ RUN apk add --no-cache \
             curl \
             libstdc++ \
             unzip \
-    && curl -L -o actorcloud.zip https://github.com/actorcloud/ActorCloud/releases/download/v3.0.0-rc.2/ActorCloud-v3.0.0-rc.2.zip \
+    && curl -L -o actorcloud.zip https://github.com/actorcloud/ActorCloud/releases/download/${tag}/ActorCloud-${tag}.zip \
     && unzip -o -q actorcloud.zip  -d /opt/ && rm -rf actorcloud.zip \
     && apk add --no-cache --virtual .build-deps \
                gcc \
