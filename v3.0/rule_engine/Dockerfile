@@ -6,7 +6,7 @@ COPY docker-entrypoint.sh /usr/bin/
 RUN apt-get update \
     && apt-get install -y curl tar procps \
     && rm -rf /var/lib/apt/lists/* \
-    && curl -L -o actorcloud.zip https://github.com/actorcloud/ActorCloud/releases/download/${tag}/ActorCloud-${tag}.zip \
+    && curl -L -o actorcloud.tar.gz https://github.com/actorcloud/ActorCloud/releases/download/${tag}/ActorCloud-${tag}.tar.gz \
     && tar -zxvf actorcloud.tar.gz -C /opt \
     && curl -L -o pulsar.tar.gz https://archive.apache.org/dist/pulsar/pulsar-2.2.0/apache-pulsar-2.2.0-bin.tar.gz \
     && tar -zxvf pulsar.tar.gz -C /opt \
