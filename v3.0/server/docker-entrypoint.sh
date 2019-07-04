@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ "$1" = '/bin/sh' ]]; then
+if [[ -d /opt/actorcloud/deploy/ ]]; then
      cp -r /tmp/stash/nginx/* /etc/nginx \
   && cp -r /tmp/stash/static/* /opt/actorcloud/server/static \
   && cp -r /opt/actorcloud/deploy/nginx/* /etc/nginx/ \
